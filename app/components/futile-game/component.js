@@ -3,6 +3,8 @@ import { computed } from '@ember/object';
 import Game from 'futile-games/lib/game';
 
 export default Component.extend({
+  classNames: 'futile-game',
+
   init(){
     this._super();
     this.set('game', new Game());
@@ -24,7 +26,7 @@ export default Component.extend({
    ].join('');
   }),
 
-  endPosterPath: computed(
+  posterName: computed(
     'angle',
     'game.{player0NewPos,player1NewPos}',
     function() {

@@ -1,3 +1,21 @@
 body {
   background: black;
 }
+
+.video-player {
+  position: relative;
+}
+
+.video-player__video {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.futile-game {
+  min-height: 600px;
+  height: 95vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

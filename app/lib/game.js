@@ -32,7 +32,7 @@ export default class Game {
     this.player0Move = '1';
     this.player1Move = '-';
     // for end poster
-    this.player0NewPos = 2;
+    this.player0NewPos = 1;
     this.player1NewPos = 4;
   }
 
@@ -144,7 +144,7 @@ export default class Game {
     const total = Object.values(opts).reduce((sum, v) => sum + v, 0);
     const choice = this.randomInt(total);
     let count = 0;
-    return Object.entries(opts).find(([key, weight]) => {
+    return Object.entries(opts).find(([, weight]) => {
       return choice >= count && choice < (count += weight);
     })[0];
   }
