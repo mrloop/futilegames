@@ -27,11 +27,35 @@ export default Component.extend({
   didInsertElement() {
     this.set('video', this.element.getElementsByTagName('video')[0]);
     window.video = this.video;
-    this.video.addEventListener("canplaythrough", () => this.video.play());
-    this.video.addEventListener("ended", this.get('ended').bind(this));
-    this.video.addEventListener("play", () => {
+    this.addVideoEventListener('canplaythrough', () => this.video.play());
+    this.addVideoEventListener("ended", this.get('ended').bind(this));
+    this.addVideoEventListener("play", () => {
       debug(this.get('poster'));
       later(() => this.set('imgSrc', `images/${this.get('poster')}.png`), 1000);
     });
+    this.debugVideo();
+  },
+
+  addVideoEventListener(name, fnc) {
+    this.video.addEventListener(name, () =>{
+      fnc.call(this);
+      debug(name);
+    })
+  },
+
+  debugVideo() {
+    [
+      'canplay',
+      'playing',
+      'error',
+      'abort',
+      'loadstart',
+      'loadeddata',
+      'waiting',
+    ].forEach((name) => this.logEvent(name));
+  },
+
+  logEvent(name) {
+    this.video.addEventListener(name, () => debug(name))
   },
 });
