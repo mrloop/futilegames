@@ -31,6 +31,9 @@ export default class Game {
     this.player1Pos = 4;
     this.player0Move = '1';
     this.player1Move = '-';
+    // for end poster
+    this.player0NewPos = 2;
+    this.player1NewPos = 4;
   }
 
   toString() {
@@ -45,16 +48,20 @@ export default class Game {
 
   nextMove() {
     const player = this.nextPlayer();
-    const player0Pos = this.player0NewPos();
-    const player1Pos = this.player1NewPos();
+    const player0Pos = this.playerNewPos(this.player0Pos, this.player0Move);
+    const player1Pos = this.playerNewPos(this.player1Pos, this.player1Move);
     const player0Move = this.playerMove(0, player);
     const player1Move = this.playerMove(1, player);
+    const player0NewPos = this.playerNewPos(player0Pos, player0Move);
+    const player1NewPos = this.playerNewPos(player1Pos, player1Move);
     setProperties(this, {
       currentPlayer: player,
       player0Pos,
       player1Pos,
       player0Move,
       player1Move,
+      player0NewPos,
+      player1NewPos,
     });
     debug(`${this.toString()}  move: ${i++}`);
   }
@@ -71,8 +78,8 @@ export default class Game {
   }
 
   possibleMove(player) {
-    const player0Pos = this.player0NewPos();
-    const player1Pos = this.player1NewPos();
+    const player0Pos = this.playerNewPos(this.player0Pos, this.player0Move);
+    const player1Pos = this.playerNewPos(this.player1Pos, this.player1Move);
     let myCounter = player == 0 ? player0Pos : player1Pos;
     let otherCounter = player == 1 ? player0Pos : player1Pos;
     let v = myCounter - otherCounter;
@@ -95,18 +102,18 @@ export default class Game {
     return pos;
   }
 
+  playerNewPos(playerPos, playerMove) {
+    if (parseInt(playerMove)) {
+      return playerMove;
+    }
+    return playerPos
+  }
+
   player0NewPos() {
     if (parseInt(this.player0Move)){
       return this.player0Move;
     }
     return this.player0Pos;
-  }
-
-  player1NewPos() {
-    if (parseInt(this.player1Move)){
-      return this.player1Move;
-    }
-    return this.player1Pos;
   }
 
   nextPlayer() {

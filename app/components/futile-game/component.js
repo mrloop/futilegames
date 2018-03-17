@@ -24,6 +24,21 @@ export default Component.extend({
    ].join('');
   }),
 
+  endPosterPath: computed(
+    'angle',
+    'game.{player0NewPos,player1NewPos}',
+    function() {
+    return [
+      this.angle,
+      '-',
+      this.game.player1NewPos,
+      '-',
+      this.game.player0NewPos,
+      '-',
+    ].join('');
+  }),
+
+
   actions: {
     moveFinished() {
       this.game.nextMove();
