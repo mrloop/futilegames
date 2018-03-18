@@ -40,6 +40,19 @@ export default Component.extend({
     ].join('');
   }),
 
+  initialPosterName: computed(
+    'angle',
+    'game.{player0Pos,player1Pos}',
+    function() {
+    return [
+      this.angle,
+      '-',
+      this.game.player1Pos,
+      '-',
+      this.game.player0Pos,
+      '-',
+    ].join('');
+  }),
 
   actions: {
     moveFinished() {

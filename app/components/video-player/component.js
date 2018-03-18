@@ -38,6 +38,7 @@ export default Component.extend({
       debug(this.get('poster'));
       later(() => this.set('imgSrc', `images/${this.get('poster')}.png`), 1000);
     });
+    this.set('imgSrc', `images/${this.get('initialPoster')}.png`);
     this.debugVideo();
   },
 
@@ -63,4 +64,8 @@ export default Component.extend({
   logEvent(name) {
     this.video.addEventListener(name, () => debug(name))
   },
+
+  click(event) {
+    this.video.play();
+  }
 });
