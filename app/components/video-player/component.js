@@ -10,8 +10,13 @@ export default Component.extend({
   type: 'mp4',
 
   src: computed('dir' ,'ext', 'name', function() {
-    next(() => this.video.load());
-    return `${this.get('dir')}/${this.get('name')}.${this.get('ext')}`;
+    next(() => {
+      this.video.load();
+      debug('video.load()');
+    });
+    const src = `${this.get('dir')}/${this.get('name')}.${this.get('ext')}`;
+    debug(`src: ${src}`);
+    return src;
   }),
 
   ext: computed('type', function() {
@@ -38,8 +43,8 @@ export default Component.extend({
 
   addVideoEventListener(name, fnc) {
     this.video.addEventListener(name, () =>{
-      fnc.call(this);
       debug(name);
+      fnc.call(this);
     })
   },
 

@@ -50,8 +50,7 @@ export default class Game {
     const player = this.nextPlayer();
     const player0Pos = this.playerNewPos(this.player0Pos, this.player0Move);
     const player1Pos = this.playerNewPos(this.player1Pos, this.player1Move);
-    const player0Move = this.playerMove(0, player);
-    const player1Move = this.playerMove(1, player);
+    const [player0Move, player1Move] = this.playersMoves(player);
     const player0NewPos = this.playerNewPos(player0Pos, player0Move);
     const player1NewPos = this.playerNewPos(player1Pos, player1Move);
     setProperties(this, {
@@ -64,6 +63,18 @@ export default class Game {
       player1NewPos,
     });
     debug(`${this.toString()}  move: ${i++}`);
+  }
+
+  playersMoves(player) {
+    // must be new move
+    while(true) {
+      const player0Move = this.playerMove(0, player);
+      const player1Move = this.playerMove(1, player);
+      if(player0Move != this.player0Move ||
+          player1Move != this.player1Move) {
+        return [player0Move, player1Move];
+      }
+    }
   }
 
   playerMove(thisPlayer, nextPlayer) {
