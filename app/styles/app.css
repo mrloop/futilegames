@@ -6,7 +6,12 @@ body {
   position: relative;
 }
 
+.video-player__img {
+  width: 100%;
+}
+
 .video-player__video {
+  width: 100%;
   position: absolute;
   left: 0;
   top: 0;
