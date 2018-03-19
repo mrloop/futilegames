@@ -9,18 +9,14 @@ export default Component.extend({
   dir: 'videos',
   type: 'mp4',
 
-  src: computed('dir' ,'ext', 'name', function() {
+  src: computed('dir', 'name', function() {
     next(() => {
       this.video.load();
       debug('video.load()');
     });
-    const src = `${this.get('dir')}/${this.get('name')}.${this.get('ext')}`;
+    const src = `${this.get('dir')}/${this.get('name')}`;
     debug(`src: ${src}`);
     return src;
-  }),
-
-  ext: computed('type', function() {
-    return 'mp4';
   }),
 
   ended() {
