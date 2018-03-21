@@ -61,7 +61,7 @@ export default Component.extend({
     this.video.addEventListener(name, () => debug(name))
   },
 
-  click(event) {
+  click() {
     this.video.play();
   }
 });

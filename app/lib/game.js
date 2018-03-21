@@ -67,7 +67,7 @@ export default class Game {
 
   playersMoves(player) {
     // must be new move
-    while(true) {
+    for(;;) {
       const player0Move = this.playerMove(0, player);
       const player1Move = this.playerMove(1, player);
       if(player0Move != this.player0Move ||
