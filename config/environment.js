@@ -23,7 +23,7 @@ module.exports = function(environment) {
     },
     ifa: {
       enabled: true,
-      inline: false,
+      inline: true,
     },
   };
 

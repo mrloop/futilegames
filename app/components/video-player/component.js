@@ -38,7 +38,6 @@ export default Component.extend({
 
   didInsertElement() {
     this.set('video', this.element.getElementsByTagName('video')[0]);
-    window.video = this.video;
     this.addVideoEventListener('canplaythrough', () => this.video.play());
     this.addVideoEventListener("ended", this.get('ended').bind(this));
     this.addVideoEventListener("play", () => {

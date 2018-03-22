@@ -7,20 +7,8 @@ module('Integration | Component | video-player', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
-
-    await render(hbs`{{video-player}}`);
-
-    assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
-    await render(hbs`
-      {{#video-player}}
-        template block text
-      {{/video-player}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    await render(hbs`{{video-player initialPoster='1-4-1-'}}`);
+    const src = this.element.firstElementChild.firstElementChild.getAttribute('src')
+    assert.equal('images/1-4-1-.png', src);
   });
 });
