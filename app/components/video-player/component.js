@@ -6,6 +6,7 @@ import { inject as service } from '@ember/service';
 
 export default Component.extend({
   assetMap: service('asset-map'),
+  video: service('video-transport'),
 
   classNames: 'video-player',
 
@@ -14,7 +15,7 @@ export default Component.extend({
 
   src: computed('dir', 'name', function() {
     next(() => {
-      this.video.load();
+      this.get('video').load();
       debug('video.load()');
     });
     const src = `${this.get('dir')}/${this.get('name')}`;
@@ -37,15 +38,15 @@ export default Component.extend({
   },
 
   didInsertElement() {
-    this.set('video', this.element.getElementsByTagName('video')[0]);
-    this.addVideoEventListener('canplaythrough', () => this.video.play());
-    this.addVideoEventListener("ended", this.get('ended').bind(this));
-    this.addVideoEventListener("play", () => {
+    this.set('video.content', this.element.getElementsByTagName('video')[0]);
+    this.get('video').addEventListener('canplaythrough', () => this.get('video').play());
+    this.get('video').addEventListener("ended", this.get('ended').bind(this));
+    this.get('video').addEventListener("play", () => {
       debug(this.get('poster'));
       later(() => this.set('imgSrc', this.get('posterImgPath')), 1000);
     });
     this.set('imgSrc', this.get('initialPosterImgPath'));
-    this.debugVideo();
+    this.get('video').debug();
   },
 
   posterImgPath: computed('poster', function() {
@@ -58,30 +59,7 @@ export default Component.extend({
       .resolve(`images/${this.get('initialPoster')}.png`);
   }),
 
-  addVideoEventListener(name, fnc) {
-    this.video.addEventListener(name, () =>{
-      debug(name);
-      fnc.call(this);
-    })
-  },
-
-  debugVideo() {
-    [
-      'canplay',
-      'playing',
-      'error',
-      'abort',
-      'loadstart',
-      'loadeddata',
-      'waiting',
-    ].forEach((name) => this.logEvent(name));
-  },
-
-  logEvent(name) {
-    this.video.addEventListener(name, () => debug(name))
-  },
-
   click() {
-    this.video.play();
+    this.get('video').play();
   }
 });
