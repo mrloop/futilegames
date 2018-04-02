@@ -12,15 +12,6 @@ module('Integration | Component | title-click', function(hooks) {
 
     await render(hbs`{{title-click}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
-    await render(hbs`
-      {{#title-click}}
-        template block text
-      {{/title-click}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.ok(/Futile[\s\S]*Games[\s\S]*CLICK TO BEGIN/.test(this.element.textContent));
   });
 });
