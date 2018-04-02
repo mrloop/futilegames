@@ -6,6 +6,10 @@ export default Service.extend({
     this.get('content').play();
   },
 
+  pause() {
+    this.get('content').pause();
+  },
+
   load()  {
     this.get('content').load();
   },
