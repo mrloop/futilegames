@@ -4,6 +4,14 @@ const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function(defaults) {
   let app = new EmberApp(defaults, {
+    'asset-cache': {
+      include: [
+        'assets/**/*',
+        'fonts/*',
+        'videos/*',
+        'images/*',
+      ],
+    },
     fingerprint: {
       enabled: true,
       generateAssetMap: true,
