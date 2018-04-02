@@ -15,7 +15,7 @@
   color: white;
   border-color: white;
 
-  &.clicked {
+  &.fade-out {
     opacity: 0;
     color: black;
     transition: color 2s linear, visibility 0s 4s, opacity 2s linear 2s;
@@ -26,12 +26,12 @@
   display: inline-block;
   font-family: "cheque", serif;
   letter-spacing: 0.1em;
-  font-size: 7em;
+  font-size: 5em;
   cursor: pointer;
   text-align: center;
   user-select: none;
 
-  .clicked & {
+  .fade-out & {
     cursor: default
   }
 }
@@ -48,6 +48,11 @@
   font-family: arial;
   font-weight: bold;
   letter-spacing: 0.5em;
+  opacity: 0;
+  .show-begin & {
+    opacity: 1;
+    transition: opacity 1s ease;
+  }
 }
 
 body {
@@ -77,4 +82,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media (min-width: 480px) {
+  .title {
+    font-size: 7em;
+  }
 }

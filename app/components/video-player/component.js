@@ -39,13 +39,21 @@ export default Component.extend({
 
   didInsertElement() {
     this.set('video.content', this.element.getElementsByTagName('video')[0]);
+    this.set('imgSrc', this.get('initialPosterImgPath'));
+    this.detectAutoplay();
+  },
+
+  detectAutoplay(){
+    this.addVideoEventListeners();
+  },
+
+  addVideoEventListeners() {
     this.get('video').addEventListener('canplaythrough', () => this.get('video').play());
     this.get('video').addEventListener("ended", this.get('ended').bind(this));
     this.get('video').addEventListener("play", () => {
       debug(this.get('poster'));
       later(() => this.set('imgSrc', this.get('posterImgPath')), 1000);
     });
-    this.set('imgSrc', this.get('initialPosterImgPath'));
     this.get('video').debug();
   },
 
@@ -58,8 +66,4 @@ export default Component.extend({
     return this.get('assetMap')
       .resolve(`images/${this.get('initialPoster')}.png`);
   }),
-
-  click() {
-    this.get('video').play();
-  }
 });
