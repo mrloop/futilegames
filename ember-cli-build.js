@@ -8,9 +8,11 @@ module.exports = function(defaults) {
       include: [
         'assets/**/*',
         'fonts/*',
-        'videos/*',
         'images/*',
       ],
+    },
+    'esw-cache-fallback': {
+      patterns: ['.*\.(mp4|webm)'], // eslint-disable-line no-useless-escape
     },
     fingerprint: {
       enabled: true,

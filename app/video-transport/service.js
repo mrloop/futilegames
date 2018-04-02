@@ -1,11 +1,15 @@
 import Service from '@ember/service';
 import { debug } from '@ember/debug';
 import { later } from '@ember/runloop';
+import { inject as service } from '@ember/service';
 
 export default Service.extend({
+  videoLoader: service(),
+
   play() {
     this.autoplayDetection();
     this.get('content').play();
+    this.cacheVideos();
   },
 
   pause() {
@@ -21,6 +25,14 @@ export default Service.extend({
       debug(name);
       fnc.call(this);
     })
+  },
+
+  cacheVideos() {
+    if (!this.get('preloaded')) {
+      this.set('preloaded', true);
+      const format = this.get('content.currentSrc').split('.').pop();
+      this.get('videoLoader').preload(format);
+    }
   },
 
   autoplayDetection() {
