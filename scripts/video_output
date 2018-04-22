@@ -1,0 +1,80 @@
+#!/bin/bash
+
+# ./video_output video_dir ouput_dir
+
+# encode lossless video to web ready video
+# args directory of video to encode
+
+if [ "$3" != 'encode' ]; then
+
+  mkdir -p $2
+
+  # find all video files
+  # recursively call this script to encode
+  # using 6 processs in parallel
+
+  find $1 -type f | xargs -P 6 -I file ./video_output file $2 encode
+
+  rm *.log
+  rm *.mbtree
+
+else
+
+  # encode
+
+  data_rate=150K
+
+  path=$1
+  file=${path##*/}
+  name=${file%%.*}
+
+  # mp4
+
+  ffmpeg \
+    -y -i "$1" \
+    -vf yadif -pass 1 \
+    -passlogfile $name-mp4 \
+    -s 788x576 \
+    -c:v libx264 -b:v $data_rate \
+    -an \
+    -pix_fmt yuv420p -movflags +faststart \
+    -preset slower -strict -2 \
+    -f mp4 /dev/null
+
+  ffmpeg \
+    -y -i "$1" \
+    -vf yadif -pass 2 \
+    -passlogfile $name-mp4 \
+    -s 788x576 \
+    -c:v libx264 -b:v $data_rate \
+    -an \
+    -pix_fmt yuv420p -movflags +faststart \
+    -preset slower -strict -2 \
+    $2/$name.mp4
+
+  # webm
+
+  ffmpeg \
+    -y -i "$1" \
+    -vf yadif -pass 1 \
+    -passlogfile $name-webm \
+    -s 788x576 \
+    -c:v libvpx-vp9 -b:v $data_rate \
+    -an \
+    -threads 1 -speed 1 \
+    -tile-columns 6 -frame-parallel 1 \
+    -auto-alt-ref 1 -lag-in-frames 25 \
+    -f webm /dev/null
+
+  ffmpeg \
+    -y -i "$1" \
+    -vf yadif -pass 2 \
+    -passlogfile $name-webm \
+    -s 788x576 \
+    -c:v libvpx-vp9 -b:v $data_rate \
+    -an \
+    -threads 1 -speed 1 \
+    -tile-columns 6 -frame-parallel 1 \
+    -auto-alt-ref 1 -lag-in-frames 25 \
+    $2/$name.webm
+fi
