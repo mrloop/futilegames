@@ -78,21 +78,23 @@ export default class Game {
   }
 
   playerMove(thisPlayer, nextPlayer) {
+    return this.weightedChoice(this.possibleMoves(thisPlayer, nextPlayer));
+  }
+
+  possibleMoves(thisPlayer, nextPlayer) {
     const choices = {'d': 1, 't': 1};
     if (thisPlayer != nextPlayer) {
       choices['-'] = 10;
     } else {
       choices['f'] = 1;
-      choices[this.possibleMove(nextPlayer)] = 10;
+      choices[this.possibleCounterMove(nextPlayer)] = 10;
     }
-    return this.weightedChoice(choices);
+    return choices;
   }
 
-  possibleMove(player) {
-    const player0Pos = this.playerNewPos(this.player0Pos, this.player0Move);
-    const player1Pos = this.playerNewPos(this.player1Pos, this.player1Move);
-    let myCounter = player == 0 ? player0Pos : player1Pos;
-    let otherCounter = player == 1 ? player0Pos : player1Pos;
+  possibleCounterMove(player) {
+    let myCounter = player == 0 ? this.player0NewPos : this.player1NewPos;
+    let otherCounter = player == 1 ? this.player0NewPos : this.player1NewPos;
     let v = myCounter - otherCounter;
     if (v == -2 || v == 2) {
       v = this.randomInt(1) ? -1 : 1;
@@ -118,13 +120,6 @@ export default class Game {
       return playerMove;
     }
     return playerPos
-  }
-
-  player0NewPos() {
-    if (parseInt(this.player0Move)){
-      return this.player0Move;
-    }
-    return this.player0Pos;
   }
 
   nextPlayer() {
