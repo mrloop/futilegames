@@ -10,14 +10,11 @@ export default Component.extend({
     this.set('game', new Game());
   },
 
-  angle: 1,
-
   videoName: computed(
-    'angle',
-    'game.{currentPlayer,player0Pos,player1Pos,player0Move,player1Move}',
+    'game.{angle,currentPlayer,player0Pos,player1Pos,player0Move,player1Move}',
     function() {
     return [
-      this.angle,
+      this.game.angle,
       this.game.currentPlayer,
       this.game.player1Pos,
       this.game.player1Move,
@@ -27,11 +24,10 @@ export default Component.extend({
   }),
 
   posterName: computed(
-    'angle',
-    'game.{player0NewPos,player1NewPos}',
+    'game.{angle,player0NewPos,player1NewPos}',
     function() {
     return [
-      this.angle,
+      this.game.angle,
       '-',
       this.game.player1NewPos,
       '-',
@@ -41,11 +37,10 @@ export default Component.extend({
   }),
 
   initialPosterName: computed(
-    'angle',
-    'game.{player0Pos,player1Pos}',
+    'game.{angle,player0Pos,player1Pos}',
     function() {
     return [
-      this.angle,
+      this.game.angle,
       '-',
       this.game.player1Pos,
       '-',

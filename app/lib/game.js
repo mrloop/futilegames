@@ -26,6 +26,7 @@ export default class Game {
 */
   constructor() {
     this.demo = true;
+    this.angle = 1;
     this.currentPlayer = '0';
     this.player0Pos = 2;
     this.player1Pos = 4;
@@ -38,6 +39,7 @@ export default class Game {
 
   toString() {
     return [
+      this.angle,
       this.currentPlayer,
       this.player1Pos,
       this.player1Move,
