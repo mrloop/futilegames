@@ -23,58 +23,67 @@ else
   # encode
 
   data_rate=150K
+  frame_size=788x576
 
   path=$1
   file=${path##*/}
   name=${file%%.*}
 
+  # extract frame
+
+  ffmpeg -ss 00:00:00.000 \
+    -i "$1" -vframes 1 \
+    -s $frame_size \
+    -vf yadif \
+    -vcodec png -an -y "$2/$name.png"
+
   # mp4
-
-  ffmpeg \
-    -y -i "$1" \
-    -vf yadif -pass 1 \
-    -passlogfile $name-mp4 \
-    -s 788x576 \
-    -c:v libx264 -b:v $data_rate \
-    -an \
-    -pix_fmt yuv420p -movflags +faststart \
-    -preset slower -strict -2 \
-    -f mp4 /dev/null
-
-  ffmpeg \
-    -y -i "$1" \
-    -vf yadif -pass 2 \
-    -passlogfile $name-mp4 \
-    -s 788x576 \
-    -c:v libx264 -b:v $data_rate \
-    -an \
-    -pix_fmt yuv420p -movflags +faststart \
-    -preset slower -strict -2 \
-    $2/$name.mp4
-
-  # webm
-
-  ffmpeg \
-    -y -i "$1" \
-    -vf yadif -pass 1 \
-    -passlogfile $name-webm \
-    -s 788x576 \
-    -c:v libvpx-vp9 -b:v $data_rate \
-    -an \
-    -threads 1 -speed 1 \
-    -tile-columns 6 -frame-parallel 1 \
-    -auto-alt-ref 1 -lag-in-frames 25 \
-    -f webm /dev/null
-
-  ffmpeg \
-    -y -i "$1" \
-    -vf yadif -pass 2 \
-    -passlogfile $name-webm \
-    -s 788x576 \
-    -c:v libvpx-vp9 -b:v $data_rate \
-    -an \
-    -threads 1 -speed 1 \
-    -tile-columns 6 -frame-parallel 1 \
-    -auto-alt-ref 1 -lag-in-frames 25 \
-    $2/$name.webm
+#
+#  ffmpeg \
+#    -y -i "$1" \
+#    -vf yadif -pass 1 \
+#    -passlogfile $name-mp4 \
+#    -s $frame_size \
+#    -c:v libx264 -b:v $data_rate \
+#    -an \
+#    -pix_fmt yuv420p -movflags +faststart \
+#    -preset slower -strict -2 \
+#    -f mp4 /dev/null
+#
+#  ffmpeg \
+#    -y -i "$1" \
+#    -vf yadif -pass 2 \
+#    -passlogfile $name-mp4 \
+#    -s $frame_size \
+#    -c:v libx264 -b:v $data_rate \
+#    -an \
+#    -pix_fmt yuv420p -movflags +faststart \
+#    -preset slower -strict -2 \
+#    $2/$name.mp4
+#
+#  # webm
+#
+#  ffmpeg \
+#    -y -i "$1" \
+#    -vf yadif -pass 1 \
+#    -passlogfile $name-webm \
+#    -s $frame_size \
+#    -c:v libvpx-vp9 -b:v $data_rate \
+#    -an \
+#    -threads 1 -speed 1 \
+#    -tile-columns 6 -frame-parallel 1 \
+#    -auto-alt-ref 1 -lag-in-frames 25 \
+#    -f webm /dev/null
+#
+#  ffmpeg \
+#    -y -i "$1" \
+#    -vf yadif -pass 2 \
+#    -passlogfile $name-webm \
+#    -s $frame_size \
+#    -c:v libvpx-vp9 -b:v $data_rate \
+#    -an \
+#    -threads 1 -speed 1 \
+#    -tile-columns 6 -frame-parallel 1 \
+#    -auto-alt-ref 1 -lag-in-frames 25 \
+#    $2/$name.webm
 fi

@@ -52,10 +52,11 @@ export default class Game {
     const player = this.nextPlayer();
     const player0Pos = this.playerNewPos(this.player0Pos, this.player0Move);
     const player1Pos = this.playerNewPos(this.player1Pos, this.player1Move);
-    const [player0Move, player1Move] = this.playersMoves(player);
+    const [player0Move, player1Move, angle] = this.playersMoves(player);
     const player0NewPos = this.playerNewPos(player0Pos, player0Move);
     const player1NewPos = this.playerNewPos(player1Pos, player1Move);
     setProperties(this, {
+      angle,
       currentPlayer: player,
       player0Pos,
       player1Pos,
@@ -68,22 +69,37 @@ export default class Game {
   }
 
   playersMoves(player) {
+    const angle = this.chooseNextAngle();
     // must be new move
     for(;;) {
-      const player0Move = this.playerMove(0, player);
-      const player1Move = this.playerMove(1, player);
+      const player0Move = this.playerMove(0, player, angle);
+      const player1Move = this.playerMove(1, player, angle);
       if(player0Move != this.player0Move ||
           player1Move != this.player1Move) {
-        return [player0Move, player1Move];
+        return [player0Move, player1Move, angle];
       }
     }
   }
 
-  playerMove(thisPlayer, nextPlayer) {
-    return this.weightedChoice(this.possibleMoves(thisPlayer, nextPlayer));
+  playerMove(thisPlayer, nextPlayer, angle) {
+    return this.weightedChoice(this.possibleMoves(thisPlayer, nextPlayer, angle));
   }
 
-  possibleMoves(thisPlayer, nextPlayer) {
+  possibleMoves(thisPlayer, nextPlayer, angle) {
+    return this[`possibleAngle${angle}Moves`].call(this, thisPlayer, nextPlayer);
+  }
+
+  possibleAngle3Moves(thisPlayer, nextPlayer) {
+    const choices = {};
+    if (thisPlayer != nextPlayer) {
+      choices['-'] = 1;
+    } else {
+      choices[this.possibleCounterMove(nextPlayer)] = 1;
+    }
+    return choices;
+  }
+
+  possibleAngle1Moves(thisPlayer, nextPlayer) {
     const choices = {'d': 1, 't': 1};
     if (thisPlayer != nextPlayer) {
       choices['-'] = 10;
@@ -136,6 +152,15 @@ export default class Game {
     choices[this.currentPlayer] = 1;
     choices[this.otherPlayer()] = 20;
     return this.weightedChoice(choices);
+  }
+
+  chooseNextAngle() {
+    if(this.angle === 3) {
+      return 1;
+    } else if(this.randomInt(5) == 1) {
+      return 3;
+    }
+    return this.angle;
   }
 
   otherPlayer() {
