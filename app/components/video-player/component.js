@@ -48,7 +48,8 @@ export default Component.extend({
   },
 
   addVideoEventListeners() {
-    this.get('video').addEventListener('canplaythrough', () => this.get('video').play());
+    // canplaythrough not reliably fired use canplay instead
+    this.get('video').addEventListener('canplay', () => this.get('video').play());
     this.get('video').addEventListener("ended", this.get('ended').bind(this));
     this.get('video').addEventListener("play", () => {
       debug(this.get('poster'));
