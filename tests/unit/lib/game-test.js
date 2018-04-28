@@ -27,32 +27,29 @@ test("game.weightedChoice", function(assert) {
   assert.ok(choices['kiwi'] < 30);
 });
 
-test("game.possibleMove", function(assert) {
+test("game.possibleCounterMoves", function(assert) {
   const game = new Game();
 
   game.player0NewPos = 2;
   game.player1NewPos = 4;
 
-  new Array(...Array(50)).forEach(() => {
-    let move = game.possibleCounterMove(1);
-    assert.ok([1,3].includes(move),`${move} in [1,3]`)
+  let moves = game.possibleCounterMoves(1);
+  assert.deepEqual(moves.sort(), [1,3], `${moves} eq [1,3]`)
 
-    move = game.possibleCounterMove(0);
-    assert.ok([1,3].includes(move),`${move} in [1,3]`)
-  });
-
+  moves = game.possibleCounterMoves(0);
+  assert.deepEqual(moves.sort(), [1,3], `${moves} eq [1,3]`)
 
   game.player0NewPos = 2;
   game.player1NewPos = 1;
 
-  assert.equal(game.possibleCounterMove(1), 4, 4);
-  assert.equal(game.possibleCounterMove(0), 3, 3);
+  assert.deepEqual(game.possibleCounterMoves(1), [4], [4]);
+  assert.deepEqual(game.possibleCounterMoves(0), [3], [3]);
 
   game.player0NewPos = 2;
   game.player1NewPos = 3;
 
-  assert.equal(game.possibleCounterMove(1), 4, 4);
-  assert.equal(game.possibleCounterMove(0), 1, 1);
+  assert.deepEqual(game.possibleCounterMoves(1), [4], [4]);
+  assert.deepEqual(game.possibleCounterMoves(0), [1], [1]);
 });
 
 test("game.circular", function(assert) {

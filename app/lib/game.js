@@ -55,6 +55,7 @@ export default class Game {
     const [player0Move, player1Move, angle] = this.playersMoves(player);
     const player0NewPos = this.playerNewPos(player0Pos, player0Move);
     const player1NewPos = this.playerNewPos(player1Pos, player1Move);
+
     setProperties(this, {
       angle,
       currentPlayer: player,
@@ -94,7 +95,9 @@ export default class Game {
     if (thisPlayer != nextPlayer) {
       choices['-'] = 1;
     } else {
-      choices[this.possibleCounterMove(nextPlayer)] = 1;
+      this.possibleCounterMoves(nextPlayer).forEach((pos) => {
+        choices[pos] = 1;
+      })
     }
     return choices;
   }
@@ -105,23 +108,28 @@ export default class Game {
       choices['-'] = 10;
     } else {
       choices['f'] = 1;
-      choices[this.possibleCounterMove(nextPlayer)] = 10;
+      const pos = this.possibleCounterMoves(nextPlayer);
+      pos.forEach((m) => {
+        choices[m] = 10/pos.length;
+      })
     }
     return choices;
   }
 
-  possibleCounterMove(player) {
+  possibleCounterMoves(player) {
     let myCounter = player == 0 ? this.player0NewPos : this.player1NewPos;
     let otherCounter = player == 1 ? this.player0NewPos : this.player1NewPos;
     let v = myCounter - otherCounter;
     if (v == -2 || v == 2) {
-      v = this.randomInt(1) ? -1 : 1;
+      v = [-1, 1];
     } else if (v == -3) {
-      v = 1;
+      v = [1];
     } else if (v == 3) {
-      v = -1;
+      v = [-1];
+    } else {
+      v = [v];
     }
-    return this.circular(parseInt(myCounter) + v)
+    return v.map((i) => this.circular(parseInt(myCounter) + i));
   }
 
   circular(pos) {
