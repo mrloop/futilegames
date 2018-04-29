@@ -1,11 +1,16 @@
 import { module, test } from 'qunit';
 import Game from 'futile-games/lib/game';
 
-module("Unit | Lib | game");
+let game = undefined;
+
+module("Unit | Lib | game", {
+  beforeEach: function() {
+    game = new Game();
+  }
+})
 
 test("game.randomInt", function(assert) {
   assert.expect(5);
-  const game = new Game();
   Array
     .from({length: 100}, () => game.randomInt(5))
     .reduce((arr, value) => {
@@ -16,7 +21,6 @@ test("game.randomInt", function(assert) {
 });
 
 test("game.weightedChoice", function(assert) {
-  const game = new Game();
   const choices = Array
     .from({length: 100}, () => game.weightedChoice({ banana: 8, kiwi: 2 }))
     .reduce((hsh, value) => {
@@ -28,8 +32,6 @@ test("game.weightedChoice", function(assert) {
 });
 
 test("game.possibleCounterMoves", function(assert) {
-  const game = new Game();
-
   game.player0NewPos = 2;
   game.player1NewPos = 4;
 
@@ -52,8 +54,24 @@ test("game.possibleCounterMoves", function(assert) {
   assert.deepEqual(game.possibleCounterMoves(0), [1], [1]);
 });
 
+test("game.possibleMoves", function(assert) {
+  game.player0NewPos = 2;
+  game.player1NewPos = 4;
+
+  let moves = game.possibleMoves({forPlayer: 1, nextPlayer: 1, angle:1})
+  assert.deepEqual(moves, {'1': 5, '3': 5, 'd': 1, 'f': 1, 't': 1}, JSON.stringify(moves))
+
+  moves = game.possibleMoves({forPlayer: 1, nextPlayer: 1, angle:3})
+  assert.deepEqual(moves, {'1': 1, '3': 1}, JSON.stringify(moves))
+
+  moves = game.possibleMoves({forPlayer: 1, nextPlayer: 0, angle:1})
+  assert.deepEqual(moves, {'-': 10, 'd': 1, 't': 1}, JSON.stringify(moves))
+
+  moves = game.possibleMoves({forPlayer: 1, nextPlayer: 0, angle:3})
+  assert.deepEqual(moves, {'-': 1}, JSON.stringify(moves))
+});
+
 test("game.circular", function(assert) {
-  const game = new Game();
   assert.equal(game.circular(0), 4, 0);
   assert.equal(game.circular(1), 1, 1);
   assert.equal(game.circular(2), 2, 2);

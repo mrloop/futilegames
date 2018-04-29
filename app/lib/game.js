@@ -69,12 +69,12 @@ export default class Game {
     debug(`${this.toString()}  move: ${i++}`);
   }
 
-  playersMoves(player) {
+  playersMoves(nextPlayer) {
     const angle = this.chooseNextAngle();
     // must be new move
     for(;;) {
-      const player0Move = this.playerMove(0, player, angle);
-      const player1Move = this.playerMove(1, player, angle);
+      const player0Move = this.playerMove({forPlayer: 0, nextPlayer, angle});
+      const player1Move = this.playerMove({forPlayer: 1, nextPlayer, angle});
       if(player0Move != this.player0Move ||
           player1Move != this.player1Move) {
         return [player0Move, player1Move, angle];
@@ -82,17 +82,17 @@ export default class Game {
     }
   }
 
-  playerMove(thisPlayer, nextPlayer, angle) {
-    return this.weightedChoice(this.possibleMoves(thisPlayer, nextPlayer, angle));
+  playerMove({forPlayer, nextPlayer, angle}) {
+    return this.weightedChoice(this.possibleMoves({forPlayer, nextPlayer, angle}));
   }
 
-  possibleMoves(thisPlayer, nextPlayer, angle) {
-    return this[`possibleAngle${angle}Moves`].call(this, thisPlayer, nextPlayer);
+  possibleMoves({forPlayer, nextPlayer, angle}) {
+    return this[`possibleAngle${angle}Moves`].call(this, {forPlayer, nextPlayer});
   }
 
-  possibleAngle3Moves(thisPlayer, nextPlayer) {
+  possibleAngle3Moves({forPlayer, nextPlayer}) {
     const choices = {};
-    if (thisPlayer != nextPlayer) {
+    if (forPlayer != nextPlayer) {
       choices['-'] = 1;
     } else {
       this.possibleCounterMoves(nextPlayer).forEach((pos) => {
@@ -102,13 +102,13 @@ export default class Game {
     return choices;
   }
 
-  possibleAngle1Moves(thisPlayer, nextPlayer) {
+  possibleAngle1Moves({forPlayer, nextPlayer}) {
     const choices = {'d': 1, 't': 1};
-    if (thisPlayer != nextPlayer) {
+    if (forPlayer != nextPlayer) {
       choices['-'] = 10;
     } else {
       choices['f'] = 1;
-      const pos = this.possibleCounterMoves(nextPlayer);
+      const pos = this.possibleCounterMoves(forPlayer);
       pos.forEach((m) => {
         choices[m] = 10/pos.length;
       })
