@@ -71,6 +71,27 @@ test("game.possibleMoves", function(assert) {
   assert.deepEqual(moves, {'-': 1}, JSON.stringify(moves))
 });
 
+test("game.isValid", function(assert) {
+  game.player0NewPos = 2;
+  game.player1NewPos = 4;
+
+  [1, 3, '3', '1', 't', 'f', 'd'].forEach((move) => {
+    assert.ok(game.isValid({move, player: 1, angle: 1}));
+  });
+
+  [1, 3, '3', '1'].forEach((move) => {
+    assert.ok(game.isValid({move, player: 1, angle: 3}));
+  });
+
+  ['-', '2', '4', 2, 4, -1, 5].forEach((move) => {
+    assert.notOk(game.isValid({move, player: 1, angle: 1}));
+  });
+
+  ['-', '2', '4', 2, 4, -1, 5, 't', 'f', 'd'].forEach((move) => {
+    assert.notOk(game.isValid({move, player: 1, angle: 3}));
+  });
+});
+
 test("game.circular", function(assert) {
   assert.equal(game.circular(0), 4, 0);
   assert.equal(game.circular(1), 1, 1);

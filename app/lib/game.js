@@ -48,6 +48,14 @@ export default class Game {
     ].join('');
   }
 
+  isValid({move, player, angle}) {
+    return Object.keys(this.possibleMoves({
+      forPlayer: player,
+      nextPlayer: player,
+      angle
+    })).indexOf(''+move) > -1;
+  }
+
   nextMove() {
     const player = this.nextPlayer();
     const player0Pos = this.playerNewPos(this.player0Pos, this.player0Move);
