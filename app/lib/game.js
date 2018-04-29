@@ -49,11 +49,45 @@ export default class Game {
   }
 
   isValid({move, player, angle}) {
-    return Object.keys(this.possibleMoves({
-      forPlayer: player,
-      nextPlayer: player,
-      angle
-    })).indexOf(''+move) > -1;
+    return move != this[`player${player}Move`] &&
+      Object.keys(this.possibleMoves({
+        forPlayer: player,
+        nextPlayer: player,
+        angle
+      })).indexOf(''+move) > -1;
+  }
+
+  move(move) {
+    const player = this.nextPlayer();
+    const otherPlayer = player ? 0 : 1;
+    const angle = this.angle;
+    const valid = this.isValid({move, player, angle})
+    if(valid) {
+      const props = Object.assign(
+        { currentPlayer: player },
+        this.movePositions({forPlayer: player, nextPlayer: player, angle, move}),
+        this.movePositions({forPlayer: otherPlayer, nextPlayer: player, angle, move})
+      )
+      props[`player${player}Move`] = move;
+      setProperties(this, props);
+      debug(`${this.toString()}  move: ${i++}`);
+    }
+    return valid;
+  }
+
+  movePositions({ forPlayer, nextPlayer, angle, move}) {
+    const props = {};
+    const playerMoveStr = `player${forPlayer}Move`;
+    const playerPosStr =  `player${forPlayer}Pos`;
+    const playerNewPosStr = `player${forPlayer}NewPos`;
+    if (forPlayer == nextPlayer) {
+      props[playerMoveStr] = move;
+    } else {
+      props[playerMoveStr] = this.playerMove({ forPlayer, nextPlayer, angle});
+    }
+    props[playerPosStr] = this.playerNewPos(this[playerPosStr], this[playerMoveStr]);
+    props[playerNewPosStr] = this.playerNewPos(props[playerPosStr], props[playerMoveStr]);
+    return props;
   }
 
   nextMove() {
