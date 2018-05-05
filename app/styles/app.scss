@@ -3,6 +3,14 @@
   src: url('/fonts/cheque.otf');
 }
 
+noscript {
+  color: white;
+  p {
+    margin: 40px;
+    text-align: right;
+  }
+}
+
 .title__container {
   height: 100%;
   width: 100%;
