@@ -7,13 +7,15 @@ export default Component.extend({
   video: service('video-transport'),
 
   classNames: ['title__container'],
-  classNameBindings: ['fadeOut', 'showBegin'],
+  classNameBindings: ['hide', 'fadeOut', 'showBegin'],
 
   clicked: false,
 
   fadeOut: computed('clicked', 'showBegin', function() {
-    return this.get('clicked') ||
+    const fadeOut = this.get('clicked') ||
       (this.get('video.autoplayDetectionEnded') && this.get('video.autoplay'))
+    later(() => this.set('hide', true), 6000)
+    return fadeOut;
   }),
 
   showBegin: computed('video.{autoplay,autoplayDetectionEnded}', function() {

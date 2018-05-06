@@ -28,6 +28,10 @@ noscript {
     color: black;
     transition: color 2s linear, visibility 0s 4s, opacity 2s linear 2s;
   }
+
+  &.hide {
+    display: none;
+  }
 }
 
 .title {
