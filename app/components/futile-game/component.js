@@ -58,6 +58,10 @@ export default Component.extend({
         this.game.nextMove();
       }
     },
+
+    togglePlayer(player) {
+      this.toggleProperty(`autoPlayer${player}`);
+    },
   },
 
   move(move) {
