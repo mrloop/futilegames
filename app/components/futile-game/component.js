@@ -22,7 +22,7 @@ export default Component.extend({
       this.game.player1Move,
       this.game.player0Pos,
       this.game.player0Move,
-   ].join('');
+    ].join('');
   }),
 
   posterName: computed(

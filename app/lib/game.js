@@ -60,11 +60,11 @@ export default class Game {
   move(move) {
     const player = this.nextPlayer();
     const otherPlayer = player ? 0 : 1;
-    const angle = this.angle;
+    const angle = this.chooseNextAngle();
     const valid = this.isValid({move, player, angle})
     if(valid) {
       const props = Object.assign(
-        { currentPlayer: player },
+        { angle, currentPlayer: player },
         this.movePositions({forPlayer: player, nextPlayer: player, angle, move}),
         this.movePositions({forPlayer: otherPlayer, nextPlayer: player, angle, move})
       )
