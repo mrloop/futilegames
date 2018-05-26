@@ -1,27 +1,27 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-import Game from 'futile-games/lib/game';
+import { inject as service } from '@ember/service';
+import { alias } from '@ember/object/computed';
 
 export default Component.extend({
+  gameState: service(),
+
   classNames: 'futile-game',
   autoPlayer0: true,
   autoPlayer1: true,
 
-  init(){
-    this._super();
-    this.set('game', new Game());
-  },
+  game: alias('gameState.game'),
 
   videoName: computed(
     'game.{angle,currentPlayer,player0Pos,player1Pos,player0Move,player1Move}',
     function() {
     return [
-      this.game.angle,
-      this.game.currentPlayer,
-      this.game.player1Pos,
-      this.game.player1Move,
-      this.game.player0Pos,
-      this.game.player0Move,
+      this.get('game.angle'),
+      this.get('game.currentPlayer'),
+      this.get('game.player1Pos'),
+      this.get('game.player1Move'),
+      this.get('game.player0Pos'),
+      this.get('game.player0Move'),
     ].join('');
   }),
 
@@ -29,11 +29,11 @@ export default Component.extend({
     'game.{angle,player0NewPos,player1NewPos}',
     function() {
     return [
-      this.game.angle,
+      this.get('game.angle'),
       '-',
-      this.game.player1NewPos,
+      this.get('game.player1NewPos'),
       '-',
-      this.game.player0NewPos,
+      this.get('game.player0NewPos'),
       '-',
     ].join('');
   }),
@@ -42,11 +42,11 @@ export default Component.extend({
     'game.{angle,player0Pos,player1Pos}',
     function() {
     return [
-      this.game.angle,
+      this.get('game.angle'),
       '-',
-      this.game.player1Pos,
+      this.get('game.player1Pos'),
       '-',
-      this.game.player0Pos,
+      this.get('game.player0Pos'),
       '-',
     ].join('');
   }),
@@ -55,20 +55,24 @@ export default Component.extend({
     moveFinished() {
       this.set('moveFinished', true);
       if(this.get(`autoPlayer${this.get('game').nextPlayer()}`)) {
-        this.game.nextMove();
+        this.get('game').nextMove();
       }
     },
 
     togglePlayer(player) {
       this.toggleProperty(`autoPlayer${player}`);
     },
+
+    move(move){
+      this.move(move);
+    }
   },
 
   move(move) {
     if(this.get('moveFinished')) {
       this.set(
         'moveFinished',
-        !this.game.move(move)
+        !this.get('game').move(move)
       );
     }
   },

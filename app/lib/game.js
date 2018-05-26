@@ -48,7 +48,7 @@ export default class Game {
     ].join('');
   }
 
-  isValid({move, player, angle}) {
+  isValid({move, player=this.currentPlayer, angle=this.angle}) {
     return move != this[`player${player}Move`] &&
       Object.keys(this.possibleMoves({
         forPlayer: player,

@@ -9,10 +9,10 @@ module('Integration | Component | futile-game', function(hooks) {
   test('it renders', async function(assert) {
     await render(hbs`
       {{#futile-game as |name initialPoster poster movieFinished|}}
-        {{name}}
+        <div class="name-it">{{name}}</div>
       {{/futile-game}}
     `);
 
-    assert.equal(this.element.textContent.trim(), '104-21');
+    assert.equal(this.element.getElementsByClassName('name-it')[0].textContent.trim(), '104-21');
   });
 });
