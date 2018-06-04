@@ -3,11 +3,11 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | board-side', function(hooks) {
+module('Integration | Component | make-move', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
-    await render(hbs`{{board-side}}`);
+    await render(hbs`{{make-move pos=3}}`);
 
     assert.equal(this.element.getElementsByTagName('polygon').length, 1);
   });

@@ -7,7 +7,7 @@ module('Integration | Helper | valid-move', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders true', async function(assert) {
-    this.set('inputValue', '2');
+    this.set('inputValue', '3');
 
     await render(hbs`{{#if (valid-move inputValue)}}hot potato{{/if}}`);
 
