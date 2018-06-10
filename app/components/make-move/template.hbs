@@ -1,4 +1,4 @@
-{{#if (valid-move pos)}}
+{{#if (valid-move move=pos angle=angle)}}
   <polygon {{action "move" pos}}
     class="board-position"
     points={{points}}

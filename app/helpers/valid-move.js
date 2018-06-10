@@ -12,7 +12,7 @@ export default Helper.extend({
     this.recompute();
   }),
 
-  compute([move]) {
-    return this.get('game').isValid({move});
+  compute(params, namedArgs) {
+    return this.get('game').isValid(namedArgs);
   }
 });
