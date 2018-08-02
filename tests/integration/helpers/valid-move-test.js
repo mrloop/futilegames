@@ -9,13 +9,13 @@ module('Integration | Helper | valid-move', function(hooks) {
   test('it renders true', async function(assert) {
     await render(hbs`{{#if (valid-move move=3 angle=1)}}hot potato{{/if}}`);
 
-    assert.equal(this.element.textContent.trim(), 'hot potato');
+    assert.dom(this.element).hasText('hot potato');
   });
 
   test('it renders false', async function(assert) {
     await render(hbs`{{#if (valid-move move=1 angle=1)}}hot potato{{else}}ghost{{/if}}`);
 
-    assert.equal(this.element.textContent.trim(), 'ghost');
+    assert.dom(this.element).hasText('ghost');
   });
 
 });

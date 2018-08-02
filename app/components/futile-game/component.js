@@ -54,8 +54,8 @@ export default Component.extend({
   actions: {
     moveFinished() {
       this.set('moveFinished', true);
-      if(this.get(`autoPlayer${this.get('game').nextPlayer()}`)) {
-        this.get('game').nextMove();
+      if(this.get(`autoPlayer${this.game.nextPlayer()}`)) {
+        this.game.nextMove();
       }
     },
 
@@ -69,21 +69,21 @@ export default Component.extend({
   },
 
   move(move) {
-    if(this.get('moveFinished')) {
+    if(this.moveFinished) {
       this.set(
         'moveFinished',
-        !this.get('game').move(move)
+        !this.game.move(move)
       );
     }
   },
 
   didInsertElement() {
     this.set('_keyDown', this.keyDown.bind(this))
-    document.addEventListener('keydown', this.get('_keyDown'));
+    document.addEventListener('keydown', this._keyDown);
   },
 
   willDestroyElement() {
-    document.removeEventListener('keydown', this.get('_keyDown'));
+    document.removeEventListener('keydown', this._keyDown);
   },
 
   keyDown(event) {

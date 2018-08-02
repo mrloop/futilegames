@@ -13,6 +13,6 @@ export default Helper.extend({
   }),
 
   compute(params, namedArgs) {
-    return this.get('game').isValid(namedArgs) && namedArgs.angle === this.get('game').angle;
+    return this.game.isValid(namedArgs) && namedArgs.angle === this.game.angle;
   }
 });

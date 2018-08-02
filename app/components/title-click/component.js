@@ -12,7 +12,7 @@ export default Component.extend({
   clicked: false,
 
   fadeOut: computed('clicked', 'showBegin', function() {
-    const fadeOut = this.get('clicked') ||
+    const fadeOut = this.clicked ||
       (this.get('video.autoplayDetectionEnded') && this.get('video.autoplay'))
     later(() => this.set('hide', true), 6000)
     return fadeOut;
@@ -23,14 +23,14 @@ export default Component.extend({
   }),
 
   click() {
-    if (!this.get('fadeOut')) {
+    if (!this.fadeOut) {
       this.set('clicked', true);
       // start playing with user interaction where autoplay false
-      this.get('video').play();
+      this.video.play();
       // pause video wait for fade out to start
-      this.get('video').pause();
+      this.video.pause();
       // play video when fade out starts
-      later(() => this.get('video').play(), 2000);
+      later(() => this.video.play(), 2000);
     }
   }
 });

@@ -5,29 +5,29 @@ import { later } from '@ember/runloop';
 export default Service.extend({
   play() {
     this.autoplayDetection();
-    this.get('content').play();
+    this.content.play();
   },
 
   pause() {
-    this.get('content').pause();
+    this.content.pause();
   },
 
   load()  {
-    this.get('content').load();
+    this.content.load();
   },
 
   addEventListener(name, fnc) {
-    this.get('content').addEventListener(name, () =>{
+    this.content.addEventListener(name, () =>{
       debug(name);
       fnc.call(this);
     })
   },
 
   autoplayDetection() {
-    if (!this.get('autoplayDetectionStarted')) {
+    if (!this.autoplayDetectionStarted) {
       this.set('autoplayDetectionStarted', true);
       this.addEventListener('play', () => {
-        if (!this.get('autoplayDetectionEnded')) {
+        if (!this.autoplayDetectionEnded) {
           this.set('autoplay', true);
         }
       });

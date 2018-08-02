@@ -15,20 +15,20 @@ export default Component.extend({
 
   src: computed('dir', 'name', function() {
     next(() => {
-      this.get('video').load();
+      this.video.load();
       debug('video.load()');
     });
-    const src = `${this.get('dir')}/${this.get('name')}`;
+    const src = `${this.dir}/${this.name}`;
     debug(`src: ${src}`);
     return src;
   }),
 
   srcWebm: computed('src', function() {
-    return this.get('assetMap').resolve(`${this.get('src')}.webm`);
+    return this.assetMap.resolve(`${this.src}.webm`);
   }),
 
   srcMp4: computed('src', function() {
-    return this.get('assetMap').resolve(`${this.get('src')}.mp4`);
+    return this.assetMap.resolve(`${this.src}.mp4`);
   }),
 
   ended() {
@@ -39,7 +39,7 @@ export default Component.extend({
 
   didInsertElement() {
     this.set('video.content', this.element.getElementsByTagName('video')[0]);
-    this.set('imgSrc', this.get('initialPosterImgPath'));
+    this.set('imgSrc', this.initialPosterImgPath);
     this.detectAutoplay();
   },
 
@@ -49,22 +49,22 @@ export default Component.extend({
 
   addVideoEventListeners() {
     // canplaythrough not reliably fired use canplay instead
-    this.get('video').addEventListener('canplay', () => this.get('video').play());
-    this.get('video').addEventListener("ended", this.get('ended').bind(this));
-    this.get('video').addEventListener("play", () => {
-      debug(this.get('poster'));
-      later(() => this.set('imgSrc', this.get('posterImgPath')), 1000);
+    this.video.addEventListener('canplay', () => this.video.play());
+    this.video.addEventListener("ended", this.ended.bind(this));
+    this.video.addEventListener("play", () => {
+      debug(this.poster);
+      later(() => this.set('imgSrc', this.posterImgPath), 1000);
     });
-    this.get('video').debug();
+    this.video.debug();
   },
 
   posterImgPath: computed('poster', function() {
-    return this.get('assetMap')
-      .resolve(`images/${this.get('poster')}.png`);
+    return this.assetMap
+      .resolve(`images/${this.poster}.png`);
   }),
 
   initialPosterImgPath: computed('initialPoster', function() {
-    return this.get('assetMap')
-      .resolve(`images/${this.get('initialPoster')}.png`);
+    return this.assetMap
+      .resolve(`images/${this.initialPoster}.png`);
   }),
 });

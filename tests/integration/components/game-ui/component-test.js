@@ -8,6 +8,6 @@ module('Integration | Component | game-ui', function(hooks) {
 
   test('it renders', async function(assert) {
     await render(hbs`{{game-ui}}`);
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom(this.element).hasText('');
   });
 });

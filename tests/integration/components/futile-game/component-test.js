@@ -13,6 +13,6 @@ module('Integration | Component | futile-game', function(hooks) {
       {{/futile-game}}
     `);
 
-    assert.equal(this.element.getElementsByClassName('name-it')[0].textContent.trim(), '104-21');
+    assert.dom(this.element.getElementsByClassName('name-it')[0]).hasText('104-21');
   });
 });
