@@ -1,7 +1,16 @@
 {{#if (valid-move move=pos angle=angle)}}
-  <polygon {{action "move" pos}}
-    class="board-position"
-    points={{points}}
-    fill="transparent"
-    stroke="none" />
+  {{#if points}}
+    <polygon {{action "move" pos}}
+      class="board-position"
+      points={{points}}
+      fill="transparent"
+      stroke="none" />
+  {{/if}}
+  {{#if path}}
+    <path {{action "move" pos}}
+      class="board-position"
+      path={{path}}
+      fill="transparent"
+      stroke="none" />
+  {{/if}}
 {{/if}}
