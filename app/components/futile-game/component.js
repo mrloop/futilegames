@@ -1,60 +1,57 @@
-import Component from '@ember/component';
-import { computed } from '@ember/object';
-import { inject as service } from '@ember/service';
-import { alias } from '@ember/object/computed';
+import Component from "@ember/component";
+import { computed } from "@ember/object";
+import { inject as service } from "@ember/service";
+import { alias } from "@ember/object/computed";
 
 export default Component.extend({
   gameState: service(),
 
-  classNames: 'futile-game',
+  classNames: "futile-game",
   autoPlayer0: true,
   autoPlayer1: true,
 
-  game: alias('gameState.game'),
+  game: alias("gameState.game"),
 
   videoName: computed(
-    'game.{angle,currentPlayer,player0Pos,player1Pos,player0Move,player1Move}',
+    "game.{angle,currentPlayer,player0Pos,player1Pos,player0Move,player1Move}",
     function() {
+      return [
+        this.get("game.angle"),
+        this.get("game.currentPlayer"),
+        this.get("game.player1Pos"),
+        this.get("game.player1Move"),
+        this.get("game.player0Pos"),
+        this.get("game.player0Move"),
+      ].join("");
+    }
+  ),
+
+  posterName: computed("game.{angle,player0NewPos,player1NewPos}", function() {
     return [
-      this.get('game.angle'),
-      this.get('game.currentPlayer'),
-      this.get('game.player1Pos'),
-      this.get('game.player1Move'),
-      this.get('game.player0Pos'),
-      this.get('game.player0Move'),
-    ].join('');
+      this.get("game.angle"),
+      "-",
+      this.get("game.player1NewPos"),
+      "-",
+      this.get("game.player0NewPos"),
+      "-",
+    ].join("");
   }),
 
-  posterName: computed(
-    'game.{angle,player0NewPos,player1NewPos}',
-    function() {
+  initialPosterName: computed("game.{angle,player0Pos,player1Pos}", function() {
     return [
-      this.get('game.angle'),
-      '-',
-      this.get('game.player1NewPos'),
-      '-',
-      this.get('game.player0NewPos'),
-      '-',
-    ].join('');
-  }),
-
-  initialPosterName: computed(
-    'game.{angle,player0Pos,player1Pos}',
-    function() {
-    return [
-      this.get('game.angle'),
-      '-',
-      this.get('game.player1Pos'),
-      '-',
-      this.get('game.player0Pos'),
-      '-',
-    ].join('');
+      this.get("game.angle"),
+      "-",
+      this.get("game.player1Pos"),
+      "-",
+      this.get("game.player0Pos"),
+      "-",
+    ].join("");
   }),
 
   actions: {
     moveFinished() {
-      this.set('moveFinished', true);
-      if(this.get(`autoPlayer${this.game.nextPlayer()}`)) {
+      this.set("moveFinished", true);
+      if (this.get(`autoPlayer${this.game.nextPlayer()}`)) {
         this.game.nextMove();
       }
     },
@@ -63,66 +60,63 @@ export default Component.extend({
       this.toggleProperty(`autoPlayer${player}`);
     },
 
-    move(move){
+    move(move) {
       this.move(move);
-    }
+    },
   },
 
   move(move) {
-    if(this.moveFinished) {
-      this.set(
-        'moveFinished',
-        !this.game.move(move)
-      );
+    if (this.moveFinished) {
+      this.set("moveFinished", !this.game.move(move));
     }
   },
 
   didInsertElement() {
-    this.set('_keyDown', this.keyDown.bind(this))
-    document.addEventListener('keydown', this._keyDown);
+    this.set("_keyDown", this.keyDown.bind(this));
+    document.addEventListener("keydown", this._keyDown);
   },
 
   willDestroyElement() {
-    document.removeEventListener('keydown', this._keyDown);
+    document.removeEventListener("keydown", this._keyDown);
   },
 
   keyDown(event) {
     switch (event.key || event.keyCode) {
-      case '1':
+      case "1":
       case 49:
-        this.toggleProperty('autoPlayer1');
+        this.toggleProperty("autoPlayer1");
         break;
-      case '2':
+      case "2":
       case 50:
-        this.toggleProperty('autoPlayer0');
+        this.toggleProperty("autoPlayer0");
         break;
-      case 'ArrowLeft':
+      case "ArrowLeft":
       case 37:
-        this.move('4');
+        this.move("4");
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
       case 38:
-        this.move('1');
+        this.move("1");
         break;
-      case 'ArrowRight':
+      case "ArrowRight":
       case 39:
-        this.move('2');
+        this.move("2");
         break;
-      case 'ArrowDown':
+      case "ArrowDown":
       case 40:
-        this.move('3');
+        this.move("3");
         break;
-      case 'd':
+      case "d":
       case 68:
-        this.move('d');
+        this.move("d");
         break;
-      case 'f':
+      case "f":
       case 70:
-        this.move('f');
+        this.move("f");
         break;
-      case 't':
+      case "t":
       case 84:
-        this.move('t');
+        this.move("t");
         break;
     }
   },

@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const EmberApp = require("ember-cli/lib/broccoli/ember-app");
 
 module.exports = function(defaults) {
   let app = new EmberApp(defaults, {
@@ -8,10 +8,9 @@ module.exports = function(defaults) {
       enabled: true,
       generateAssetMap: true,
       fingerprintAssetMap: true,
-      extensions: ['js', 'css', 'png', 'jpg', 'gif', 'map', 'mp4', 'webm'],
-    }
+      extensions: ["js", "css", "png", "jpg", "gif", "map", "mp4", "webm"],
+    },
   });
-
 
   // Use `app.import` to add additional libraries to the generated
   // output files.

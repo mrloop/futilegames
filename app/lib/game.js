@@ -1,10 +1,10 @@
-import { setProperties } from '@ember/object';
-import { debug } from '@ember/debug';
+import { setProperties } from "@ember/object";
+import { debug } from "@ember/debug";
 
 let i = 0;
 
 export default class Game {
-/*
+  /*
  board in video
 
  red - player0
@@ -27,11 +27,11 @@ export default class Game {
   constructor() {
     this.demo = true;
     this.angle = 1;
-    this.currentPlayer = '0';
+    this.currentPlayer = "0";
     this.player0Pos = 2;
     this.player1Pos = 4;
-    this.player0Move = '1';
-    this.player1Move = '-';
+    this.player0Move = "1";
+    this.player1Move = "-";
     // for end poster
     this.player0NewPos = 1;
     this.player1NewPos = 4;
@@ -45,29 +45,43 @@ export default class Game {
       this.player1Move,
       this.player0Pos,
       this.player0Move,
-    ].join('');
+    ].join("");
   }
 
-  isValid({move, player=this.nextPlayer(), angle=this.angle}) {
-    return move != this[`player${player}Move`] &&
-      Object.keys(this.possibleMoves({
-        forPlayer: player,
-        nextPlayer: player,
-        angle
-      })).indexOf(''+move) > -1;
+  isValid({ move, player = this.nextPlayer(), angle = this.angle }) {
+    return (
+      move != this[`player${player}Move`] &&
+      Object.keys(
+        this.possibleMoves({
+          forPlayer: player,
+          nextPlayer: player,
+          angle,
+        })
+      ).indexOf("" + move) > -1
+    );
   }
 
   move(move) {
     const player = this.nextPlayer();
     const otherPlayer = player ? 0 : 1;
     const angle = this.chooseNextAngle();
-    const valid = this.isValid({move, player, angle})
-    if(valid) {
+    const valid = this.isValid({ move, player, angle });
+    if (valid) {
       const props = Object.assign(
         { angle, currentPlayer: player },
-        this.movePositions({forPlayer: player, nextPlayer: player, angle, move}),
-        this.movePositions({forPlayer: otherPlayer, nextPlayer: player, angle, move})
-      )
+        this.movePositions({
+          forPlayer: player,
+          nextPlayer: player,
+          angle,
+          move,
+        }),
+        this.movePositions({
+          forPlayer: otherPlayer,
+          nextPlayer: player,
+          angle,
+          move,
+        })
+      );
       props[`player${player}Move`] = move;
       setProperties(this, props);
       debug(`${this.toString()}  move: ${i++}`);
@@ -75,18 +89,24 @@ export default class Game {
     return valid;
   }
 
-  movePositions({ forPlayer, nextPlayer, angle, move}) {
+  movePositions({ forPlayer, nextPlayer, angle, move }) {
     const props = {};
     const playerMoveStr = `player${forPlayer}Move`;
-    const playerPosStr =  `player${forPlayer}Pos`;
+    const playerPosStr = `player${forPlayer}Pos`;
     const playerNewPosStr = `player${forPlayer}NewPos`;
     if (forPlayer == nextPlayer) {
       props[playerMoveStr] = move;
     } else {
-      props[playerMoveStr] = this.playerMove({ forPlayer, nextPlayer, angle});
+      props[playerMoveStr] = this.playerMove({ forPlayer, nextPlayer, angle });
     }
-    props[playerPosStr] = this.playerNewPos(this[playerPosStr], this[playerMoveStr]);
-    props[playerNewPosStr] = this.playerNewPos(props[playerPosStr], props[playerMoveStr]);
+    props[playerPosStr] = this.playerNewPos(
+      this[playerPosStr],
+      this[playerMoveStr]
+    );
+    props[playerNewPosStr] = this.playerNewPos(
+      props[playerPosStr],
+      props[playerMoveStr]
+    );
     return props;
   }
 
@@ -114,46 +134,50 @@ export default class Game {
   playersMoves(nextPlayer) {
     const angle = this.chooseNextAngle();
     // must be new move
-    for(;;) {
-      const player0Move = this.playerMove({forPlayer: 0, nextPlayer, angle});
-      const player1Move = this.playerMove({forPlayer: 1, nextPlayer, angle});
-      if(player0Move != this.player0Move ||
-          player1Move != this.player1Move) {
+    for (;;) {
+      const player0Move = this.playerMove({ forPlayer: 0, nextPlayer, angle });
+      const player1Move = this.playerMove({ forPlayer: 1, nextPlayer, angle });
+      if (player0Move != this.player0Move || player1Move != this.player1Move) {
         return [player0Move, player1Move, angle];
       }
     }
   }
 
-  playerMove({forPlayer, nextPlayer, angle}) {
-    return this.weightedChoice(this.possibleMoves({forPlayer, nextPlayer, angle}));
+  playerMove({ forPlayer, nextPlayer, angle }) {
+    return this.weightedChoice(
+      this.possibleMoves({ forPlayer, nextPlayer, angle })
+    );
   }
 
-  possibleMoves({forPlayer, nextPlayer, angle}) {
-    return this[`possibleAngle${angle}Moves`].call(this, {forPlayer, nextPlayer});
+  possibleMoves({ forPlayer, nextPlayer, angle }) {
+    return this[`possibleAngle${angle}Moves`].call(this, {
+      forPlayer,
+      nextPlayer,
+    });
   }
 
-  possibleAngle3Moves({forPlayer, nextPlayer}) {
+  possibleAngle3Moves({ forPlayer, nextPlayer }) {
     const choices = {};
     if (forPlayer != nextPlayer) {
-      choices['-'] = 1;
+      choices["-"] = 1;
     } else {
-      this.possibleCounterMoves(nextPlayer).forEach((pos) => {
+      this.possibleCounterMoves(nextPlayer).forEach(pos => {
         choices[pos] = 1;
-      })
+      });
     }
     return choices;
   }
 
-  possibleAngle1Moves({forPlayer, nextPlayer}) {
-    const choices = {'d': 1, 't': 1};
+  possibleAngle1Moves({ forPlayer, nextPlayer }) {
+    const choices = { d: 1, t: 1 };
     if (forPlayer != nextPlayer) {
-      choices['-'] = 10;
+      choices["-"] = 10;
     } else {
-      choices['f'] = 1;
+      choices["f"] = 1;
       const pos = this.possibleCounterMoves(forPlayer);
-      pos.forEach((m) => {
-        choices[m] = 10/pos.length;
-      })
+      pos.forEach(m => {
+        choices[m] = 10 / pos.length;
+      });
     }
     return choices;
   }
@@ -171,7 +195,7 @@ export default class Game {
     } else {
       v = [v];
     }
-    return v.map((i) => this.circular(parseInt(myCounter) + i));
+    return v.map(i => this.circular(parseInt(myCounter) + i));
   }
 
   circular(pos) {
@@ -187,7 +211,7 @@ export default class Game {
     if (parseInt(playerMove)) {
       return playerMove;
     }
-    return playerPos
+    return playerPos;
   }
 
   nextPlayer() {
@@ -205,9 +229,9 @@ export default class Game {
   }
 
   chooseNextAngle() {
-    if(this.angle === 3) {
+    if (this.angle === 3) {
       return 1;
-    } else if(this.randomInt(5) == 1) {
+    } else if (this.randomInt(5) == 1) {
       return 3;
     }
     return this.angle;
@@ -218,9 +242,11 @@ export default class Game {
   }
 
   currentPlayerTurnComplete() {
-    return (this.currentPlayer == 0 &&
-      (parseInt(this.player0Move) || this.player0Move === 'f')) ||
-      (parseInt(this.player1Move) || this.player1Move === 'f');
+    return (
+      (this.currentPlayer == 0 &&
+        (parseInt(this.player0Move) || this.player0Move === "f")) ||
+      (parseInt(this.player1Move) || this.player1Move === "f")
+    );
   }
 
   weightedChoice(opts) {
@@ -233,6 +259,6 @@ export default class Game {
   }
 
   randomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max))
+    return Math.floor(Math.random() * Math.floor(max));
   }
 }

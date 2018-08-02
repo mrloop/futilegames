@@ -1,9 +1,9 @@
-import Service from '@ember/service';
-import Game from 'futile-games/lib/game';
+import Service from "@ember/service";
+import Game from "futile-games/lib/game";
 
 export default Service.extend({
-  init(){
+  init() {
     this._super();
-    this.set('game', new Game());
-  }
+    this.set("game", new Game());
+  },
 });
