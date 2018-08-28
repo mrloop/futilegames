@@ -1,4 +1,5 @@
 import Component from "@ember/component";
+import { and } from "@ember/object/computed";
 
 export default Component.extend({
   tagName: "",
@@ -8,4 +9,6 @@ export default Component.extend({
       this.move(m);
     },
   },
+
+  circle: and("cx", "cy", "r"),
 });
