@@ -5,7 +5,7 @@ let game = undefined;
 
 module("Unit | Lib | game", function(hooks) {
   hooks.beforeEach(function() {
-    game = new Game();
+    game = Game.create();
   });
 
   test("game.randomInt", function(assert) {

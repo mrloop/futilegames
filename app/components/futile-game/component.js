@@ -1,7 +1,7 @@
 import Component from "@ember/component";
 import { computed } from "@ember/object";
 import { inject as service } from "@ember/service";
-import { alias } from "@ember/object/computed";
+import { alias, not, and } from "@ember/object/computed";
 
 export default Component.extend({
   gameState: service(),
@@ -48,11 +48,20 @@ export default Component.extend({
     ].join("");
   }),
 
+  isUiVisible: and("moveFinished", "isNextPlayerHuman"),
+
+  isNextPlayerHuman: not("isNextPlayerAuto"),
+
+  isNextPlayerAuto: computed("game.nextPlayer", function() {
+    return this.get(`autoPlayer${this.get("game.nextPlayer")}`);
+  }),
+
   actions: {
     moveFinished() {
       this.set("moveFinished", true);
-      if (this.get(`autoPlayer${this.game.nextPlayer()}`)) {
+      if (this.get("isNextPlayerAuto")) {
         this.game.nextMove();
+        this.set("moveFinished", false);
       }
     },
 
