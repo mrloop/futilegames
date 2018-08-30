@@ -1,6 +1,7 @@
 import EmberObject from "@ember/object";
 import { computed, setProperties } from "@ember/object";
 import { debug } from "@ember/debug";
+import { not } from "@ember/object/computed";
 
 let i = 0;
 
@@ -37,6 +38,9 @@ export default EmberObject.extend({
       // for end poster
       player0NewPos: 1,
       player1NewPos: 4,
+      // auto player
+      autoPlayer0: true,
+      autoPlayer1: true,
     });
   },
 
@@ -50,6 +54,12 @@ export default EmberObject.extend({
       this.player0Move,
     ].join("");
   },
+
+  isNextPlayerHuman: not("isNextPlayerAuto"),
+
+  isNextPlayerAuto: computed("nextPlayer", function() {
+    return this.get(`autoPlayer${this.nextPlayer}`);
+  }),
 
   isValid({ move, player = this.nextPlayer, angle = this.angle }) {
     return (

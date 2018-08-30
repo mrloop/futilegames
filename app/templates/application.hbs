@@ -1,8 +1,8 @@
 {{title-click}}
 
-{{#futile-game as |name initialPoster poster move moveFinished|}}
+{{#futile-game as |name initialPoster poster move moveFinished isMoveFinished|}}
   {{#video-player name=name initialPoster=initialPoster poster=poster moveFinished=moveFinished}}
-    {{game-ui move=move}}
+    {{game-ui move=move isMoveFinished=isMoveFinished}}
   {{/video-player}}
 {{/futile-game}}
 

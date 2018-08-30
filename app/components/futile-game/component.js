@@ -1,14 +1,12 @@
 import Component from "@ember/component";
 import { computed } from "@ember/object";
 import { inject as service } from "@ember/service";
-import { alias, not, and } from "@ember/object/computed";
+import { alias } from "@ember/object/computed";
 
 export default Component.extend({
   gameState: service(),
 
   classNames: "futile-game",
-  autoPlayer0: true,
-  autoPlayer1: true,
 
   game: alias("gameState.game"),
 
@@ -48,25 +46,17 @@ export default Component.extend({
     ].join("");
   }),
 
-  isUiVisible: and("moveFinished", "isNextPlayerHuman"),
-
-  isNextPlayerHuman: not("isNextPlayerAuto"),
-
-  isNextPlayerAuto: computed("game.nextPlayer", function() {
-    return this.get(`autoPlayer${this.get("game.nextPlayer")}`);
-  }),
-
   actions: {
     moveFinished() {
-      this.set("moveFinished", true);
-      if (this.get("isNextPlayerAuto")) {
+      this.set("isMoveFinished", true);
+      if (this.game.get("isNextPlayerAuto")) {
         this.game.nextMove();
-        this.set("moveFinished", false);
+        this.set("isMoveFinished", false);
       }
     },
 
     togglePlayer(player) {
-      this.toggleProperty(`autoPlayer${player}`);
+      this.game.toggleProperty(`autoPlayer${player}`);
     },
 
     move(move) {
@@ -75,8 +65,8 @@ export default Component.extend({
   },
 
   move(move) {
-    if (this.moveFinished) {
-      this.set("moveFinished", !this.game.move(move));
+    if (this.isMoveFinished) {
+      this.set("isMoveFinished", !this.game.move(move));
     }
   },
 
@@ -93,11 +83,11 @@ export default Component.extend({
     switch (event.key || event.keyCode) {
       case "1":
       case 49:
-        this.toggleProperty("autoPlayer1");
+        this.game.toggleProperty("autoPlayer1");
         break;
       case "2":
       case 50:
-        this.toggleProperty("autoPlayer0");
+        this.game.toggleProperty("autoPlayer0");
         break;
       case "ArrowLeft":
       case 37:

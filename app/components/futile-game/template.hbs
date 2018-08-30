@@ -1,6 +1,6 @@
-{{yield videoName initialPosterName posterName (action "move") (action "moveFinished")}}
+{{yield videoName initialPosterName posterName (action "move") (action "moveFinished") isMoveFinished}}
 
 <div class="futile-game__player-select">
-  <button {{action "togglePlayer" 1}} class="futile-game__player-1-button">{{if autoPlayer1 "Play" "Stop"}}</button>
-  <button {{action "togglePlayer" 0}} class="futile-game__player-2-button">{{if autoPlayer0 "Play" "Stop"}}</button>
+  <button {{action "togglePlayer" 1}} class="futile-game__player-1-button">{{if game.autoPlayer1 "Play" "Stop"}}</button>
+  <button {{action "togglePlayer" 0}} class="futile-game__player-2-button">{{if game.autoPlayer0 "Play" "Stop"}}</button>
 </div>
