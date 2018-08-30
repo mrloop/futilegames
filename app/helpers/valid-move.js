@@ -13,9 +13,10 @@ export default Helper.extend({
   }),
 
   compute(params, namedArgs) {
-    if (namedArgs.move === "d") {
-      return true;
+    if (namedArgs.angle === this.game.angle) {
+      return (
+        ["d", "f"].includes(namedArgs.move) || this.game.isValid(namedArgs)
+      );
     }
-    return this.game.isValid(namedArgs) && namedArgs.angle === this.game.angle;
   },
 });
